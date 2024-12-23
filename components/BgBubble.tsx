@@ -27,19 +27,19 @@ const styles = StyleSheet.create({
   },
   bubble1: {
     top: 40,
-    left: 40,
+    left:0,
     width: 200,
     height: 200,
   },
   bubble2: {
-    top: 150,
-    left: '50%',
+    top: 200,
+    right: 0,
     marginLeft: -150,
     width: 300,
     height: 300,
   },
   bubble3: {
-    top: 300,
+    top: 500,
     right: 20,
     width: 270,
     height: 270,
