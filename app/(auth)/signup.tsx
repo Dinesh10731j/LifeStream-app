@@ -1,27 +1,45 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity,ActivityIndicator,StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
 import React from 'react';
 import BgBubble from '@/components/BgBubble';
 import { useForm, Controller } from 'react-hook-form';
-import { LoginType } from '@/Types';
+import { SignupType } from '@/Types';
 import { useRouter } from 'expo-router';
-import { UserUserLogin } from '@/hooks/useLogin';
+import { UserUserSignup } from '@/hooks/useSigup';
 
-
-const Login = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<LoginType>();
+const Signup = () => {
+  const { control, handleSubmit, watch, formState: { errors } } = useForm<SignupType>();
   const router = useRouter();
-  const loginUser = UserUserLogin();
+  const signupUser = UserUserSignup();
+  const password = watch('password');
 
-  const OnLogin = (data: LoginType) => {
-    loginUser.mutate(data);
+  const OnSignup = (data: SignupType) => {
+    signupUser.mutate(data);
   };
 
   return (
     <View style={styles.container}>
-        <StatusBar hidden={true}/>
+      <StatusBar hidden={true}/>
       <BgBubble />
-      <View style={styles.loginBox}>
-        <Text style={styles.title}>Welcome Back</Text>
+      <View style={styles.signupBox}>
+        <Text style={styles.title}>Create Account</Text>
+
+        {/* Username Input */}
+        <Controller
+          control={control}
+          rules={{ required: 'Username is required' }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              placeholderTextColor="#ccc"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="name"
+        />
+        {errors.name && <Text style={styles.errorColor}>{errors.name.message}</Text>}
 
         {/* Email Input */}
         <Controller
@@ -72,28 +90,50 @@ const Login = () => {
         />
         {errors.password && <Text style={styles.errorColor}>{errors.password.message}</Text>}
 
+        {/* Confirm Password Input */}
+        <Controller
+          control={control}
+          rules={{
+            required: 'Please confirm your password',
+            validate: (value) => value === password || 'Passwords do not match',
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              placeholderTextColor="#ccc"
+              secureTextEntry
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="confirmpassword"
+        />
+        {errors.confirmpassword && <Text style={styles.errorColor}>{errors.confirmpassword.message}</Text>}
+
         <TouchableOpacity
           style={styles.button}
-          onPress={handleSubmit(OnLogin)}
+          onPress={handleSubmit(OnSignup)}
         >
-       {loginUser.isPending ? (
+          {signupUser.isPending ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Sign up</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push('/signup')}
+          onPress={() => router.push('/login')}
         >
-          <Text style={styles.signupText}>Sign up</Text>
+          <Text style={styles.signupText}>Already have an account? Login</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default Signup;
 
 const styles = StyleSheet.create({
   container: {
@@ -102,7 +142,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  loginBox: {
+  signupBox: {
     width: '85%',
     padding: 20,
     borderRadius: 10,
@@ -132,7 +172,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#ef4444',
+    backgroundColor: '#3b82f6',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
@@ -143,7 +183,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   signupText: {
-    color: '#ef4444',
+    color: '#3b82f6',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
