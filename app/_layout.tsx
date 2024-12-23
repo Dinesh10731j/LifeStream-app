@@ -4,11 +4,10 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import ReactQueryProvider from './react-query-provider';
-import 'react-native-reanimated';
+import { Stack } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Stack } from 'expo-router'; // expo-router already handles navigation container
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent splash screen from hiding too early
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -24,15 +23,15 @@ export default function RootLayout() {
   }, [loaded]);
 
   if (!loaded) {
-    return null; // Splash screen stays visible until fonts are loaded
+    return null; // Keep splash screen until fonts load
   }
 
   return (
     <ReactQueryProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        {/* Expo Router already provides a NavigationContainer */}
-        <Stack initialRouteName='(auth)/login' screenOptions={{headerShown:false}}>
-          
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </ThemeProvider>

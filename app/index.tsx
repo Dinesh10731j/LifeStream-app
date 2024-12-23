@@ -12,8 +12,13 @@ const Login = () => {
   const router = useRouter();
   const loginUser = UserUserLogin();
 
+
+  
+
   const OnLogin = (data: LoginType) => {
     loginUser.mutate(data);
+
+    
   };
 
   return (
@@ -84,7 +89,7 @@ const Login = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push('/signup')}
+          onPress={() => router.push('/(auth)/signup')}
         >
           <Text style={styles.signupText}>Sign up</Text>
         </TouchableOpacity>
