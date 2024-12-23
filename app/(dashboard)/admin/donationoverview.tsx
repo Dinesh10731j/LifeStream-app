@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { ActivityIndicator } from 'react-native-paper';
 import { UsegetDonationstats } from '@/hooks/useGetDonationStats';
+
 
 const DonationOverView = () => {
   const { isLoading, data: donationStats, isError,error} = UsegetDonationstats();
@@ -26,7 +27,9 @@ const DonationOverView = () => {
 
   return (
     <SafeAreaView style={styles.adminContainer}>
+    
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+   
         <Text style={styles.header}>Donation Overview</Text>
 
         {isLoading && <ActivityIndicator size={30} animating={true} color="blue" />}
