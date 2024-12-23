@@ -1,7 +1,7 @@
 import axiosInstance from "@/axiosInstance/axiosInstance";
 import { Endpoints } from "@/api/endpoints";
 import { LoginType } from "@/Types";
-import { useRoute } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 const {userLogin}= Endpoints;
 import {useMutation} from "@tanstack/react-query";
 
@@ -26,11 +26,26 @@ const userlogin = async (data:LoginType)=>{
 
 export const UserUserLogin = ()=>{
 
+    const router = useRouter();
+
     return useMutation({
         mutationKey:['userLogin'],
         mutationFn:userlogin,
-        onSuccess:()=>{
+        onSuccess:(data)=>{
+          
+
            alert("Login Success");
+           if(data.data?.role === "admin"){
+               router.push('/(dashboard)/admin/donationoverview');
+             }
+           
+           if(data.data?.role === "donor"){
+             router.push('/(dashboard)/donor/donor')
+           }
+           
+           if(data.data?.role === "receiptant"){
+             router.push('/(dashboard)/receiptant/receiptant')
+           }
 
       
 
