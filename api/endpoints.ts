@@ -6,4 +6,5 @@ DonationInfo :'/api/donation-info',
 manageReceiptant:'/api/managebloodrequest',
 Acceptrequest: "/api/accept",
 Rejectrequest: "/api/reject",
+Users:'/api/users'
 }

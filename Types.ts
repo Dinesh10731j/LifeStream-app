@@ -26,3 +26,14 @@ export interface BloodRequestType{
     updatedAt: string;
     __v: number;
 }
+
+
+export interface LifestreamUser {
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    confirmpassword: string;
+    role: 'admin' | 'donor' | 'recipient';  
+    __v: number;
+  }
