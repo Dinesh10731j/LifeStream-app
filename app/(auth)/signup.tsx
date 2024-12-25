@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { SignupType } from '@/Types';
 import { useRouter } from 'expo-router';
 import { UserUserSignup } from '@/hooks/useSigup';
+import Toast from 'react-native-toast-message';
 
 const Signup = () => {
   const { control, handleSubmit, watch, formState: { errors } } = useForm<SignupType>();
@@ -129,6 +130,7 @@ const Signup = () => {
           <Text style={styles.signupText}>Already have an account? Login</Text>
         </TouchableOpacity>
       </View>
+      <Toast/>
     </View>
   );
 };
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#ef4444',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
