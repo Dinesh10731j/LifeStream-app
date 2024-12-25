@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { LoginType } from '@/Types';
 import { useRouter } from 'expo-router';
 import { UserUserLogin } from '@/hooks/useLogin';
-
+import Toast from 'react-native-toast-message';
 
 const Login = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<LoginType>();
@@ -94,6 +94,7 @@ const Login = () => {
           <Text style={styles.signupText}>Sign up</Text>
         </TouchableOpacity>
       </View>
+      <Toast/>
     </View>
   );
 };
