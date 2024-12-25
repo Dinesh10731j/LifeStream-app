@@ -7,5 +7,5 @@ manageReceiptant:'/api/managebloodrequest',
 Acceptrequest: "/api/accept",
 Rejectrequest: "/api/reject",
 Users:'/api/users',
-Userhistory:'/api/userhistory/'
+Userhistory:'/api/userhistory'
 }
