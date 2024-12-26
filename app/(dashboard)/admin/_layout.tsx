@@ -1,7 +1,7 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import React from 'react';
-import { LayoutDashboardIcon, Package, Users, ClipboardList, User } from 'lucide-react-native';
+import { LayoutDashboardIcon, Package, Users, ClipboardList } from 'lucide-react-native';
 
 export default function AdminLayout() {
   return (

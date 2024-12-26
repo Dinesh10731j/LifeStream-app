@@ -51,7 +51,7 @@ export const UserUserLogin = () => {
         });
 
         setTimeout(() => {
-          router.push("/(dashboard)/donor/donor");
+          router.push("/(dashboard)/donor/donoroverview");
         }, 1000);
       }
 
