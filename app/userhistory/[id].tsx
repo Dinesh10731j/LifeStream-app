@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
+
 });
 
 export default UserHistory;

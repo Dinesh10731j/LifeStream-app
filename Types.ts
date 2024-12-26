@@ -37,3 +37,8 @@ export interface LifestreamUser {
     role: 'admin' | 'donor' | 'recipient';  
     __v: number;
   }
+
+  export interface UserRoleData {
+    role: string;
+    _id: string;
+  }
