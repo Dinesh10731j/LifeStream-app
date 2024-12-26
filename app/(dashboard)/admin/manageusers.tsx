@@ -16,6 +16,7 @@ import { Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import bs64 from "react-native-base64";
 import { UseChangeRole } from "@/hooks/useChangeRole";
+import { UseDeleteUser } from "@/hooks/useDeleteUser";
 import { UserRoleData } from "@/Types";
 
 const ManageUsers = () => {
@@ -30,6 +31,7 @@ const ManageUsers = () => {
 
 
   const roleChangeMutation = UseChangeRole();
+  const deleteUserMutation = UseDeleteUser();
   const openEditDialog = (user: LifestreamUser) => {
     setSelectedUser(user);
     setSelectedRole(user.role);
@@ -61,12 +63,17 @@ const ManageUsers = () => {
    
   };
 
+
+  const handleRemoveUser = (userId:string)=>{
+deleteUserMutation.mutate(userId);
+  }
+
   const renderActions = (user: LifestreamUser) => (
     <View style={styles.actions} key={user._id}>
       <TouchableOpacity onPress={() => openEditDialog(user)}>
         <Pencil size={20} color="#007bff" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => console.log("Delete User:", user._id)}>
+      <TouchableOpacity onPress={() => handleRemoveUser(user?._id)}>
         <Trash2 size={20} color="#dc3545" />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => openViewDialog(user)}>

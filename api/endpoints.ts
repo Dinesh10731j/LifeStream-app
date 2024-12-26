@@ -8,5 +8,6 @@ Acceptrequest: "/api/accept",
 Rejectrequest: "/api/reject",
 Users:'/api/users',
 Userhistory:'/api/userhistory',
-Changerole: "/api/changerole"
+Changerole: "/api/changerole",
+Deleteuser: "/api/deleteuser",
 }
