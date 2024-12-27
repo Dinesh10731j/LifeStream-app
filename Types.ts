@@ -42,3 +42,24 @@ export interface LifestreamUser {
     role: string;
     _id: string;
   }
+
+
+  export interface ScheduleDonationFormData {
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    donationType: 'Whole Blood' | 'Plasma' | 'Platelets';
+    date: string;
+    time: string; 
+    locationType: 'Blood Bank' | 'Donation Camp';
+    address: string;
+    recentIllness: boolean; // For checkboxes
+    recentTravel: boolean; 
+    medication: string;
+    chronicDiseases: string;
+    previousDonationDate: string; // Date string in 'YYYY-MM-DD' format
+    notes: string;
+    bloodQuantity: string; // Blood quantity in ml
+    bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  }
+  

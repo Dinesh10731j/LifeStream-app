@@ -11,4 +11,5 @@ Userhistory:'/api/userhistory',
 Changerole: "/api/changerole",
 Deleteuser: "/api/deleteuser",
 Donordonationstats: "/api/donor-donation-stats",
+Scheduledonation: "/api/schedulenewdonations",
 }
