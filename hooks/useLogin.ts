@@ -2,20 +2,21 @@ import axiosInstance from "@/axiosInstance/axiosInstance";
 import { Endpoints } from "@/api/endpoints";
 import { LoginType } from "@/Types";
 import { useRouter } from "expo-router";
-const { userLogin } = Endpoints;
 import { useMutation } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const { userLogin } = Endpoints;
 
 const userlogin = async (data: LoginType) => {
   try {
     const response = await axiosInstance.post(userLogin, data);
-
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error?.message);
     } else {
-      throw new Error("An unknown error occured");
+      throw new Error("An unknown error occurred");
     }
   }
 };
@@ -26,7 +27,17 @@ export const UserUserLogin = () => {
   return useMutation({
     mutationKey: ["userLogin"],
     mutationFn: userlogin,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      const userId = data.data?._id;
+      const email = data.data?.email;
+
+      if (userId && email) {
+        // Store data in AsyncStorage
+        await AsyncStorage.setItem("userid", userId);
+        await AsyncStorage.setItem("email", email);
+      }
+
+      // Handle admin login
       if (data.data?.role === "admin") {
         Toast.show({
           type: "success",
@@ -41,6 +52,7 @@ export const UserUserLogin = () => {
         }, 1000);
       }
 
+      // Handle donor login
       if (data.data?.role === "donor") {
         Toast.show({
           type: "success",
@@ -55,6 +67,7 @@ export const UserUserLogin = () => {
         }, 1000);
       }
 
+      // Handle receiptant login
       if (data.data?.role === "receiptant") {
         Toast.show({
           type: "success",
