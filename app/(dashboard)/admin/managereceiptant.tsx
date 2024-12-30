@@ -40,7 +40,7 @@ const ManageReceiptant = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Recipient Requests</Text>
-      {bloodRequest.data.map((request: BloodRequestType) => (
+      {bloodRequest.data.map((request: BloodRequestType<string>) => (
         <View key={request._id} style={styles.card}>
           <Text style={styles.name}>{request.fullName}</Text>
           <Text style={styles.info}>Blood Group: {request.bloodGroup.toUpperCase()}</Text>

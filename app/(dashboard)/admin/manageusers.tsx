@@ -23,7 +23,7 @@ const ManageUsers = () => {
   const { data: users } = UseViewUsers() || { data: [] };
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [viewModalVisible, setViewModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<LifestreamUser | null>(null);
+  const [selectedUser, setSelectedUser] = useState<LifestreamUser<string> | null>(null);
   const [selectedRole, setSelectedRole] = useState<string>("user");
 
   const widthArr = [150, 300, 120, 180];
@@ -32,13 +32,13 @@ const ManageUsers = () => {
 
   const roleChangeMutation = UseChangeRole();
   const deleteUserMutation = UseDeleteUser();
-  const openEditDialog = (user: LifestreamUser) => {
+  const openEditDialog = (user: LifestreamUser<string>) => {
     setSelectedUser(user);
     setSelectedRole(user.role);
     setEditModalVisible(true);
   };
 
-  const openViewDialog = (user: LifestreamUser) => {
+  const openViewDialog = (user: LifestreamUser<string>) => {
     setSelectedUser(user);
     setViewModalVisible(true);
   };
@@ -68,7 +68,7 @@ const ManageUsers = () => {
 deleteUserMutation.mutate(userId);
   }
 
-  const renderActions = (user: LifestreamUser) => (
+  const renderActions = (user: LifestreamUser<string>) => (
     <View style={styles.actions} key={user._id}>
       <TouchableOpacity onPress={() => openEditDialog(user)}>
         <Pencil size={20} color="#007bff" />
@@ -83,7 +83,7 @@ deleteUserMutation.mutate(userId);
   );
 
   const tableData =
-    users?.data?.map((user: LifestreamUser) => [
+    users?.data?.map((user: LifestreamUser<string>) => [
       user.name,
       user.email,
       user.role,
