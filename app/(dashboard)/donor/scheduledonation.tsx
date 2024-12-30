@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView,ActivityIndicator,TouchableOpacity } from 'react-native';
+import { View, Text, TextInput,StyleSheet, ScrollView,ActivityIndicator,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import { ScheduleDonationFormData } from '@/Types';
@@ -7,9 +7,9 @@ import { UseScheduleDonation } from '@/hooks/useScheduleDonation';
 import Toast from 'react-native-toast-message';
 
 const Scheduledonation = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<ScheduleDonationFormData>();
+  const { control, handleSubmit, formState: { errors } } = useForm<ScheduleDonationFormData<string, string, string>>();
   const scheduleDonation = UseScheduleDonation(); 
-  const onSubmit = (data: ScheduleDonationFormData) => {
+  const onSubmit = (data: ScheduleDonationFormData<string, string, string>) => {
     scheduleDonation.mutate(data, {
       onSuccess: () => {
         Toast.show({
