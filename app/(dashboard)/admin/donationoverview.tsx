@@ -1,13 +1,11 @@
 import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { ActivityIndicator } from 'react-native-paper';
 import { UsegetDonationstats } from '@/hooks/useGetDonationStats';
 
-
 const DonationOverView = () => {
-  const { isLoading, data: donationStats, isError,error} = UsegetDonationstats();
-
+  const { isLoading, data: donationStats, isError, error } = UsegetDonationstats();
 
   const chartData = donationStats
     ? donationStats.map((item: { _id: any; total: any; }, index: number) => ({
@@ -25,55 +23,79 @@ const DonationOverView = () => {
       }))
     : [];
 
+  const renderItem = ({ item }: any) => (
+    <View style={styles.chartContainer}>
+      <PieChart
+        data={[item]}
+        width={320}
+        height={220}
+        chartConfig={{
+          backgroundColor: '#000000',
+          backgroundGradientFrom: '#FFFAFA',
+          backgroundGradientTo: '#FFFAFA',
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          strokeWidth: 2,
+          barPercentage: 0.5,
+        }}
+        accessor="population"
+        backgroundColor="transparent"
+        paddingLeft="15"
+      />
+    </View>
+  );
+
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size={30} animating={true} color="blue" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.errorText}>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.adminContainer}>
-    
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-   
-        <Text style={styles.header}>Donation Overview</Text>
-
-        {isLoading && <ActivityIndicator size={30} animating={true} color="blue" />}
-        {isError && <Text style={styles.errorText}>Error: {error.message}</Text>}
-
-        {chartData && !isLoading && !isError && (
-          <View style={styles.chartContainer}>
-            <PieChart
-              data={chartData}
-              width={320}
-              height={220}
-              chartConfig={{
-                backgroundColor: '#000000',
-                backgroundGradientFrom: '#FFFAFA',
-                backgroundGradientTo: '#FFFAFA',
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                strokeWidth: 2,
-                barPercentage: 0.5,
-              }}
-              accessor="population"
-              backgroundColor="transparent"
-              paddingLeft="15"
-            />
-          </View>
-        )}
-      </ScrollView>
+      <FlatList
+        data={chartData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        ListHeaderComponent={<Text style={styles.header}>Donation Overview</Text>}
+        ListEmptyComponent={<Text style={styles.errorText}>No data available.</Text>}
+        contentContainerStyle={styles.flatListContainer}
+      />
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   adminContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  scrollContainer: {
+  flatListContainer: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
   },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   chartContainer: {
     width: '100%',
@@ -84,6 +106,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 10,
+    textAlign: 'center',
   },
 });
 

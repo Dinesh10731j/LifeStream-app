@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  ScrollView,
+  FlatList,
   View,
   TouchableOpacity,
   Text,
@@ -26,12 +26,9 @@ const ManageUsers = () => {
   const [selectedUser, setSelectedUser] = useState<LifestreamUser<string> | null>(null);
   const [selectedRole, setSelectedRole] = useState<string>("user");
 
-  const widthArr = [150, 300, 120, 180];
-  const tableHead = ["Name", "Email", "Role", "Actions"];
-
-
   const roleChangeMutation = UseChangeRole();
   const deleteUserMutation = UseDeleteUser();
+
   const openEditDialog = (user: LifestreamUser<string>) => {
     setSelectedUser(user);
     setSelectedRole(user.role);
@@ -44,7 +41,6 @@ const ManageUsers = () => {
   };
 
   const handleSaveRole = () => {
-
     if (selectedUser) {
       const userRoleData: UserRoleData = {
         role: selectedRole,
@@ -60,13 +56,11 @@ const ManageUsers = () => {
         },
       });
     }
-   
   };
 
-
-  const handleRemoveUser = (userId:string)=>{
-deleteUserMutation.mutate(userId);
-  }
+  const handleRemoveUser = (userId: string) => {
+    deleteUserMutation.mutate(userId);
+  };
 
   const renderActions = (user: LifestreamUser<string>) => (
     <View style={styles.actions} key={user._id}>
@@ -82,54 +76,30 @@ deleteUserMutation.mutate(userId);
     </View>
   );
 
-  const tableData =
-    users?.data?.map((user: LifestreamUser<string>) => [
-      user.name,
-      user.email,
-      user.role,
-      () => renderActions(user),
-    ]) || [];
+  const renderItem = ({ item }: { item: LifestreamUser<string> }) => (
+    <Row
+      data={[item.name, item.email, item.role, () => renderActions(item)]}
+      widthArr={[150, 300, 120, 180]}
+      style={styles.row}
+      textStyle={styles.text}
+    />
+  );
 
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        flexGrow: 1,
-        height: "100%",
-        backgroundColor: "white",
-      }}
-    >
-      <View>
-        <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
-          <Row
-            data={tableHead}
-            widthArr={widthArr}
-            style={styles.head}
-            textStyle={styles.text}
-          />
-        </Table>
-        <ScrollView style={styles.dataWrapper}>
-          <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
-            {tableData.map(
-              (rowData: (string | (() => JSX.Element))[], index: number) => (
-                <Row
-                  key={index}
-                  data={rowData.map((cellData: string | (() => JSX.Element)) =>
-                    typeof cellData === "function" ? cellData() : cellData
-                  )}
-                  widthArr={widthArr}
-                  style={[
-                    styles.row,
-                    index % 2 ? { backgroundColor: "#F7F6E7" } : null,
-                  ]}
-                  textStyle={styles.text}
-                />
-              )
-            )}
-          </Table>
-        </ScrollView>
-      </View>
+    <View style={styles.container}>
+      <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
+        <Row
+          data={["Name", "Email", "Role", "Actions"]}
+          widthArr={[150, 300, 120, 180]}
+          style={styles.head}
+          textStyle={styles.text}
+        />
+      </Table>
+      <FlatList
+        data={users?.data || []}
+        keyExtractor={(item) => item._id}
+        renderItem={renderItem}
+      />
       {/* Edit Role Modal */}
       <Modal
         animationType="slide"
@@ -150,7 +120,7 @@ deleteUserMutation.mutate(userId);
               <Picker.Item label="Admin" value="admin" />
               <Picker.Item label="Receiptant" value="receiptant" />
             </Picker>
-            <Button title="Save" onPress={handleSaveRole}  color={'#ef4444'}  />
+            <Button title="Save" onPress={handleSaveRole} color={'#ef4444'} />
             <Button title="Cancel" onPress={() => setEditModalVisible(false)} color={'#ef4444'} />
           </View>
         </View>
@@ -172,9 +142,7 @@ deleteUserMutation.mutate(userId);
               href={{
                 pathname: "/userhistory/[id]",
                 params: {
-                  id: selectedUser?.email
-                    ? bs64.encode(selectedUser.email)
-                    : "",
+                  id: selectedUser?.email ? bs64.encode(selectedUser.email) : "",
                 },
               }}
               style={styles.button}
@@ -189,14 +157,14 @@ deleteUserMutation.mutate(userId);
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "white" },
   head: { height: 50, backgroundColor: "#f1f8ff" },
   text: { margin: 6, textAlign: "center" },
-  dataWrapper: { marginTop: -1 },
   row: { height: 40, backgroundColor: "#E7E6E1" },
   actions: { flexDirection: "row", justifyContent: "space-around" },
   modalContainer: { flex: 1, justifyContent: "center", alignItems: "center" },

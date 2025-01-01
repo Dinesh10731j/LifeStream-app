@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { UseViewHistory } from '@/hooks/useViewHistory';
 import { Table, Row } from 'react-native-table-component';
@@ -9,7 +9,6 @@ const UserHistory = () => {
   const decodedEmail = typeof id === 'string' ? id : '';
   const { data: userHistory, error, isLoading } = UseViewHistory(decodedEmail);
 
-  // Table headers and column widths
   const tableHead = ['Name', 'Email', 'Status', 'Blood Group'];
   const widthArr = [150, 400, 120, 190];
 
@@ -29,34 +28,29 @@ const UserHistory = () => {
     );
   }
 
-  // Prepare data for the table
-  const tableData =
-    userHistory?.data?.map((history: any) => [
-      history.fullName,
-      history.email,
-      history.status,
-      history.bloodGroup,
-    ]) || [];
+  const renderItem = ({ item }: { item: any }) => (
+    <Row
+      data={[item.fullName, item.email, item.status, item.bloodGroup]}
+      widthArr={widthArr}
+      style={styles.row}
+      textStyle={styles.text}
+    />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-       <View style={styles.header}>
-          <Text style={styles.title}>User Profile History</Text>
-        </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-       
-
-        <Table borderStyle={styles.tableBorder}>
-          <Row data={tableHead} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
-            {tableData.length > 0 ? (
-            tableData.map((rowData: string[], index: number) => (
-              <Row key={index} data={rowData} widthArr={widthArr} style={styles.row} textStyle={styles.text} />
-            ))
-            ) : (
-            <Text style={styles.noData}>Data not found</Text>
-            )}
-        </Table>
-      </ScrollView>
+      <View style={styles.header}>
+        <Text style={styles.title}>User Profile History</Text>
+      </View>
+      <Table borderStyle={styles.tableBorder}>
+        <Row data={tableHead} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
+        <FlatList
+          data={userHistory?.data || []}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ListEmptyComponent={<Text style={styles.noData}>Data not found</Text>}
+        />
+      </Table>
     </SafeAreaView>
   );
 };
@@ -110,7 +104,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
-
 });
 
 export default UserHistory;

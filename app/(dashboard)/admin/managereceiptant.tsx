@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { UseManageBloodRequest } from '@/hooks/useManageBloodRequest';
 import { BloodRequestType } from '@/Types';
@@ -37,46 +37,52 @@ const ManageReceiptant = () => {
     );
   }
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Recipient Requests</Text>
-      {bloodRequest.data.map((request: BloodRequestType<string>) => (
-        <View key={request._id} style={styles.card}>
-          <Text style={styles.name}>{request.fullName}</Text>
-          <Text style={styles.info}>Blood Group: {request.bloodGroup.toUpperCase()}</Text>
-          <Text style={styles.info}>Quantity: {request.quantity} units</Text>
-          <Text style={styles.info}>Message: {request.message}</Text>
-          <Text
-            style={[styles.status, request.status === 'Accepted' ? styles.accepted : styles.rejected]}
-          >
-            {request.status}
-          </Text>
-          <Text style={styles.date}>Requested On: {new Date(request.requestdate).toDateString()}</Text>
+  const renderItem = ({ item }: { item: BloodRequestType<string> }) => (
+    <View style={styles.card}>
+      <Text style={styles.name}>{item.fullName}</Text>
+      <Text style={styles.info}>Blood Group: {item.bloodGroup.toUpperCase()}</Text>
+      <Text style={styles.info}>Quantity: {item.quantity} units</Text>
+      <Text style={styles.info}>Message: {item.message}</Text>
+      <Text
+        style={[styles.status, item.status === 'Accepted' ? styles.accepted : styles.rejected]}
+      >
+        {item.status}
+      </Text>
+      <Text style={styles.date}>Requested On: {new Date(item.requestdate).toDateString()}</Text>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.acceptButton]}
-              onPress={() => handleAccept(request._id)}
-            >
-              <View style={styles.buttonContent}>
-                <Text style={styles.buttonText}>Accept</Text>
-                {request.status === 'Accepted' && <CheckIcon size={18} color="white" />}
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.button, styles.rejectButton]}
-              onPress={() => handleReject(request._id)}
-            >
-              <View style={styles.buttonContent}>
-                <Text style={styles.buttonText}>Reject</Text>
-                {request.status === 'Rejected' && <X size={18} color="white" />}
-              </View>
-            </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, styles.acceptButton]}
+          onPress={() => handleAccept(item._id)}
+        >
+          <View style={styles.buttonContent}>
+            <Text style={styles.buttonText}>Accept</Text>
+            {item.status === 'Accepted' && <CheckIcon size={18} color="white" />}
           </View>
-        </View>
-      ))}
-    </ScrollView>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, styles.rejectButton]}
+          onPress={() => handleReject(item._id)}
+        >
+          <View style={styles.buttonContent}>
+            <Text style={styles.buttonText}>Reject</Text>
+            {item.status === 'Rejected' && <X size={18} color="white" />}
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={bloodRequest.data}
+      keyExtractor={(item) => item._id}
+      renderItem={renderItem}
+      contentContainerStyle={styles.container}
+      ListHeaderComponent={<Text style={styles.title}>Recipient Requests</Text>}
+      ListEmptyComponent={<Text style={styles.errorText}>No requests available.</Text>}
+    />
   );
 };
 
@@ -85,8 +91,6 @@ export default ManageReceiptant;
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    height: 'auto',
-    width: '100%',
     backgroundColor: '#fff',
   },
   center: {
