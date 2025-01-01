@@ -3,7 +3,7 @@ import { Endpoints } from "@/api/endpoints";
 import { useMutation } from "@tanstack/react-query";
 import { ScheduleDonationFormData } from "@/Types";
 const { Scheduledonation } = Endpoints;
-const usescheduledonation = async (data:ScheduleDonationFormData) => {
+const usescheduledonation = async (data:ScheduleDonationFormData<string,string,string>) => {
 
   try {
     const response = await axiosInstance.post(Scheduledonation,data);

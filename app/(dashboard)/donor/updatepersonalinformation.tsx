@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UseUserInfoUpdate } from '@/hooks/usePersonalInformation';
+import Toast from 'react-native-toast-message';
 
 interface DonorInfo {
   fullName: string;
@@ -35,11 +36,29 @@ const UpdatePersonalInformation: React.FC<UpdateProps> = () => {
     console.log("This ")
     mutation.mutate(data, {
       onSuccess: () => {
-        Alert.alert('Success', 'Information updated successfully');
-        navigation.goBack();
+        Toast.show({
+          type:'success',
+          text1:'Success',
+          text2:'Information updated successfully',
+          text1Style:{fontSize:20},
+          position:'top',
+          visibilityTime:4000,
+
+        });
+        setTimeout(()=>{
+          navigation.goBack();
+        },2000)
+        
       },
       onError: () => {
-        Alert.alert('Error', 'Failed to update information');
+        Toast.show({
+          type:'error',
+          text1:'Error',
+          text2:'Failed to update information',
+          text1Style:{fontSize:20},
+          position:'top',
+          visibilityTime:4000,
+        });
       },
     });
   };
@@ -126,6 +145,7 @@ const UpdatePersonalInformation: React.FC<UpdateProps> = () => {
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
       </View>
+      <Toast/>
     </View>
   );
 };
@@ -164,7 +184,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#ef4444',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
