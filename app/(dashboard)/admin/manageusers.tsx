@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import {
-  FlatList,
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
   Modal,
   Button,
+  ScrollView,
+  Alert
 } from "react-native";
 import { Table, Row } from "react-native-table-component";
 import { Pencil, Trash2, EllipsisVertical } from "lucide-react-native";
@@ -19,8 +20,9 @@ import { UseChangeRole } from "@/hooks/useChangeRole";
 import { UseDeleteUser } from "@/hooks/useDeleteUser";
 import { UserRoleData } from "@/Types";
 import Toast from "react-native-toast-message";
+
 const ManageUsers = () => {
-  const { data: users } = UseViewUsers() || { data: [] };
+  const { data: users, isLoading, error } = UseViewUsers();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<LifestreamUser<string> | null>(null);
@@ -41,7 +43,7 @@ const ManageUsers = () => {
   };
 
   const handleSaveRole = () => {
-    if (selectedUser) {
+    if (selectedUser && selectedRole) {
       const userRoleData: UserRoleData = {
         role: selectedRole,
         _id: selectedUser._id,
@@ -50,20 +52,55 @@ const ManageUsers = () => {
       roleChangeMutation.mutate(userRoleData, {
         onSuccess: () => {
           setEditModalVisible(false);
+          Toast.show({
+            text1: "Success",
+            text1Style: { fontSize: 20 },
+            text2: `Role updated to ${selectedRole}`,
+          });
         },
         onError: (error) => {
           Toast.show({
-            text1:'Error',
-            text1Style:{fontSize:20},
-            text2:error.message
-          })
+            text1: "Error",
+            text1Style: { fontSize: 20 },
+            text2: error.message,
+          });
         },
       });
     }
   };
 
   const handleRemoveUser = (userId: string) => {
-    deleteUserMutation.mutate(userId);
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete this user?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => {
+            deleteUserMutation.mutate(userId, {
+              onSuccess: () => {
+                Toast.show({
+                  text1: "Success",
+                  text1Style: { fontSize: 20 },
+                  text2: "User deleted successfully",
+                });
+              },
+              onError: (error) => {
+                Toast.show({
+                  text1: "Error",
+                  text1Style: { fontSize: 20 },
+                  text2: error.message,
+                });
+              },
+            });
+          },
+        },
+      ]
+    );
   };
 
   const renderActions = (user: LifestreamUser<string>) => (
@@ -71,7 +108,7 @@ const ManageUsers = () => {
       <TouchableOpacity onPress={() => openEditDialog(user)}>
         <Pencil size={20} color="#007bff" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleRemoveUser(user?._id)}>
+      <TouchableOpacity onPress={() => handleRemoveUser(user._id)}>
         <Trash2 size={20} color="#dc3545" />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => openViewDialog(user)}>
@@ -80,89 +117,100 @@ const ManageUsers = () => {
     </View>
   );
 
-  const renderItem = ({ item }: { item: LifestreamUser<string> }) => (
-    <Row
-      data={[item.name, item.email, item.role, () => renderActions(item)]}
-      widthArr={[150, 300, 120, 180]}
-      style={styles.row}
-      
-    />
-  );
+  // Ensure users.data exists before rendering the table
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error loading users: {error.message}</Text>;
+  }
 
   return (
-    <View style={styles.container}>
-      <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
-        <Row
-          data={["Name", "Email", "Role", "Actions"]}
-          widthArr={[150, 300, 120, 180]}
-          style={styles.head}
-          
-        />
-      </Table>
-      <FlatList
-        data={users?.data || []}
-        keyExtractor={(item) => item._id}
-        renderItem={renderItem}
-      />
-      {/* Edit Role Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={editModalVisible}
-        onRequestClose={() => setEditModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              Edit Role for {selectedUser?.name}
-            </Text>
-            <Picker
-              selectedValue={selectedRole}
-              onValueChange={(itemValue) => setSelectedRole(itemValue)}
-            >
-              <Picker.Item label="Donor" value="donor" />
-              <Picker.Item label="Admin" value="admin" />
-              <Picker.Item label="Receiptant" value="receiptant" />
-            </Picker>
-            <Button title="Save" onPress={handleSaveRole} color={'#ef4444'} />
-            <Button title="Cancel" onPress={() => setEditModalVisible(false)} color={'#ef4444'} />
-          </View>
-        </View>
-      </Modal>
-      {/* View User Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={viewModalVisible}
-        onRequestClose={() => setViewModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>User Details</Text>
-            <Text style={styles.modalText}>{selectedUser?.name}</Text>
-            <Text style={styles.modalText}>{selectedUser?.email}</Text>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View style={styles.container}>
+        <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
+          <Row
+            data={["Name", "Email", "Role", "Actions"]}
+            widthArr={[150, 300, 120, 180]}
+            style={styles.head}
+          />
+         
+          {users?.data && users.data ? (
+            users.data.map((item: any) => (
+              <Row
+                key={item._id}
+                data={[item.name, item.email, item.role, renderActions(item)]}
+                widthArr={[150, 300, 120, 180]}
+                style={styles.row}
+              />
+            ))
+          ) : (
+            <Text>No users found.</Text>
+          )}
+        </Table>
 
-            <Link
-              href={{
-                pathname: "/userhistory/[id]",
-                params: {
-                  id: selectedUser?.email ? bs64.encode(selectedUser.email) : "",
-                },
-              }}
-              style={styles.button}
-            >
-              View History
-            </Link>
-            <Button
-              title="Close"
-              onPress={() => setViewModalVisible(false)}
-              color={"#ef4444"}
-            />
+        {/* Edit Role Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={editModalVisible}
+          onRequestClose={() => setEditModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                Edit Role for {selectedUser?.name}
+              </Text>
+              <Picker
+                selectedValue={selectedRole}
+                onValueChange={(itemValue) => setSelectedRole(itemValue)}
+              >
+                <Picker.Item label="Donor" value="donor" />
+                <Picker.Item label="Admin" value="admin" />
+                <Picker.Item label="Recipient" value="recipient" />
+              </Picker>
+              <Button title="Save" onPress={handleSaveRole} color={'#ef4444'} />
+              <Button title="Cancel" onPress={() => setEditModalVisible(false)} color={'#ef4444'} />
+            </View>
           </View>
-        </View>
-      </Modal>
-      <Toast/>
-    </View>
+        </Modal>
+
+        {/* View User Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={viewModalVisible}
+          onRequestClose={() => setViewModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>User Details</Text>
+              <Text style={styles.modalText}>{selectedUser?.name}</Text>
+              <Text style={styles.modalText}>{selectedUser?.email}</Text>
+
+              <Link
+                href={{
+                  pathname: "/userhistory/[id]",
+                  params: {
+                    id: selectedUser?.email ? bs64.encode(selectedUser.email) : "",
+                  },
+                }}
+                style={styles.button}
+              >
+                View History
+              </Link>
+              <Button
+                title="Close"
+                onPress={() => setViewModalVisible(false)}
+                color={'#ef4444'}
+              />
+            </View>
+          </View>
+        </Modal>
+        <Toast />
+      </View>
+    </ScrollView>
   );
 };
 

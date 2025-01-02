@@ -16,7 +16,7 @@ const viewusers = async () => {
 export const UseViewUsers = () => {
   return useQuery({
     queryKey: ["users"],
-    queryFn: viewusers,
+    queryFn:viewusers,
     staleTime: 1000,
     refetchInterval: 1000,
     refetchOnMount: "always",

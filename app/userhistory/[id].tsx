@@ -1,10 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { UseViewHistory } from '@/hooks/useViewHistory';
 import { Table, Row } from 'react-native-table-component';
+import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+interface UserHistoryData {
+  fullName: string;
+  email: string;
+  status: string;
+  bloodGroup: string;
+}
 
-const UserHistory = () => {
+interface UserHistoryResponse {
+  data: UserHistoryData[];
+}
+
+const UserHistory: React.FC = () => {
   const { id } = useLocalSearchParams();
   const decodedEmail = typeof id === 'string' ? id : '';
   const { data: userHistory, error, isLoading } = UseViewHistory(decodedEmail);
@@ -28,30 +40,35 @@ const UserHistory = () => {
     );
   }
 
-  const renderItem = ({ item }: { item: any }) => (
-    <Row
-      data={[item.fullName, item.email, item.status, item.bloodGroup]}
-      widthArr={widthArr}
-      style={styles.row}
-      textStyle={styles.text}
-    />
-  );
-
   return (
+    <GestureHandlerRootView>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
     <SafeAreaView style={styles.container}>
+      
       <View style={styles.header}>
         <Text style={styles.title}>User Profile History</Text>
       </View>
       <Table borderStyle={styles.tableBorder}>
         <Row data={tableHead} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
-        <FlatList
-          data={userHistory?.data || []}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          ListEmptyComponent={<Text style={styles.noData}>Data not found</Text>}
-        />
+       
+        {userHistory?.data?.length > 0 ? (
+          userHistory.data.map((item:UserHistoryData, index:number) => (
+            <Row
+              key={index} 
+              data={[item.fullName, item.email, item.status, item.bloodGroup]}
+              widthArr={widthArr}
+              style={styles.row}
+              textStyle={styles.text}
+            />
+          ))
+        ) : (
+          <Text style={styles.noData}>Data not found</Text>
+        )}
       </Table>
-    </SafeAreaView>
+      </SafeAreaView>
+      </ScrollView>
+   
+    </GestureHandlerRootView>
   );
 };
 
