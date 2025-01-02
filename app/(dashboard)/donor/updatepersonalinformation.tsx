@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UseUserInfoUpdate } from '@/hooks/usePersonalInformation';
@@ -33,7 +32,6 @@ const UpdatePersonalInformation: React.FC<UpdateProps> = () => {
   const mutation = UseUserInfoUpdate();
 
   const onSubmit = (data: DonorInfo) => {
-    console.log("This ")
     mutation.mutate(data, {
       onSuccess: () => {
         Toast.show({
