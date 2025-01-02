@@ -1,9 +1,21 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import React from 'react';
-import { LayoutDashboardIcon, Package, Users, ClipboardList } from 'lucide-react-native';
-
+import { Image,View,Text,TouchableOpacity,StyleSheet } from 'react-native';
+import { LayoutDashboardIcon, Package, Users, ClipboardList,LogOut} from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { UseUserProfile } from '@/hooks/useUserProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function AdminLayout() {
+  const router = useRouter();
+  const {data} =UseUserProfile();
+
+  const handleLogout = () => {
+    router.replace('/');
+    AsyncStorage.removeItem('userId');
+    AsyncStorage.removeItem('role');
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -18,6 +30,19 @@ export default function AdminLayout() {
           },
           drawerActiveTintColor: 'white',  
           drawerActiveBackgroundColor: '#D32F2F', 
+           headerRight: () => (
+                      <View style={styles.headerRightContainer}>
+                        {data && data?.name ? (
+                          <Image 
+                            source={{ uri: `https://avatar.iran.liara.run/username?username=${data?.name}` }}
+                            style={styles.avatar}
+                          />
+                        ) : null}
+                        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+                          <LogOut size={24} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                    ),
         }}
       >
         <Drawer.Screen
@@ -64,3 +89,19 @@ export default function AdminLayout() {
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  logoutButton: {
+    marginRight: 16,
+  },
+  headerRightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 12,
+  },
+});
