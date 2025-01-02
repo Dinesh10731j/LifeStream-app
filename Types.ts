@@ -74,3 +74,19 @@ export type donationTypes = ScheduleDonationFormData<
   "Blood Bank" | "Donation Camp",
   "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-"
 >;
+
+
+export interface DonationItem {
+  _id: string;
+  fullName: string;
+  email: string;
+  donationType: string;
+  phoneNumber: string;
+  date: string;
+  status: string;
+}
+
+export interface ViewHistoryProps {
+  email: string;
+}
+

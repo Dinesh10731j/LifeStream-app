@@ -18,7 +18,7 @@ import bs64 from "react-native-base64";
 import { UseChangeRole } from "@/hooks/useChangeRole";
 import { UseDeleteUser } from "@/hooks/useDeleteUser";
 import { UserRoleData } from "@/Types";
-
+import Toast from "react-native-toast-message";
 const ManageUsers = () => {
   const { data: users } = UseViewUsers() || { data: [] };
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -52,7 +52,11 @@ const ManageUsers = () => {
           setEditModalVisible(false);
         },
         onError: (error) => {
-          console.error("Failed to change role:", error);
+          Toast.show({
+            text1:'Error',
+            text1Style:{fontSize:20},
+            text2:error.message
+          })
         },
       });
     }
@@ -81,7 +85,7 @@ const ManageUsers = () => {
       data={[item.name, item.email, item.role, () => renderActions(item)]}
       widthArr={[150, 300, 120, 180]}
       style={styles.row}
-      textStyle={styles.text}
+      
     />
   );
 
@@ -92,7 +96,7 @@ const ManageUsers = () => {
           data={["Name", "Email", "Role", "Actions"]}
           widthArr={[150, 300, 120, 180]}
           style={styles.head}
-          textStyle={styles.text}
+          
         />
       </Table>
       <FlatList
@@ -157,6 +161,7 @@ const ManageUsers = () => {
           </View>
         </View>
       </Modal>
+      <Toast/>
     </View>
   );
 };

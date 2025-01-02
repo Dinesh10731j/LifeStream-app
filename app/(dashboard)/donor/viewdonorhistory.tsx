@@ -1,35 +1,37 @@
-import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
-import { Table, Row, Rows } from 'react-native-table-component';
-import { UseDonorHistory } from '@/hooks/useDonorDonationHistory';
-
-interface DonationItem {
-  _id: string;
-  fullName: string;
-  email: string;
-  donationType: string;
-  phoneNumber: string;
-  date: string;
-  status: string;
-}
-
-interface ViewHistoryProps {
-  email: string;
-}
+import React from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { Table, Row, Rows } from "react-native-table-component";
+import { UseDonorHistory } from "@/hooks/useDonorDonationHistory";
+import { DonationItem } from "@/Types";
+import { ViewHistoryProps } from "@/Types";
 
 const ViewDonationHistory: React.FC<ViewHistoryProps> = () => {
   const { isLoading, data, isError } = UseDonorHistory();
 
-  const tableHead = ['Name', 'Email', 'Donation Type', 'Phone', 'Date', 'Status'];
+  const tableHead = [
+    "Name",
+    "Email",
+    "Donation Type",
+    "Phone",
+    "Date",
+    "Status",
+  ];
   const widthArr = [150, 300, 120, 180, 150, 150];
-  const tableData = data?.map((item: DonationItem) => [
-    item.fullName,
-    item.email,
-    item.donationType,
-    item.phoneNumber,
-    new Date(item.date).toLocaleDateString(),
-    item.status,
-  ]) || [];
+  const tableData =
+    data?.map((item: DonationItem) => [
+      item.fullName,
+      item.email,
+      item.donationType,
+      item.phoneNumber,
+      new Date(item.date).toLocaleDateString(),
+      item.status,
+    ]) || [];
 
   return (
     <View style={styles.container}>
@@ -41,8 +43,13 @@ const ViewDonationHistory: React.FC<ViewHistoryProps> = () => {
       ) : data?.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View>
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-              <Row data={tableHead} widthArr={widthArr} style={styles.head} textStyle={styles.text} />
+            <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
+              <Row
+                data={tableHead}
+                widthArr={widthArr}
+                style={styles.head}
+              textStyle={styles.text}
+              />
               <Rows data={tableData} widthArr={widthArr} style={styles.text} />
             </Table>
           </View>
@@ -59,34 +66,34 @@ export default ViewDonationHistory;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 16,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff',
+    backgroundColor: "#f1f8ff",
   },
   text: {
     margin: 6,
-    textAlign: 'center',
+    textAlign: "center",
   },
   loader: {
     marginTop: 20,
   },
   error: {
-    color: 'red',
-    textAlign: 'center',
+    color: "red",
+    textAlign: "center",
     marginTop: 10,
   },
   noData: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
     fontSize: 18,
   },

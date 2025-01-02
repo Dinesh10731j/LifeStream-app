@@ -14,4 +14,5 @@ Donordonationstats: "/api/donor-donation-stats",
 Scheduledonation: "/api/schedulenewdonations",
 UpdateInfo: "/api/updatepersonalinformation",
 Donorhistory:'/api/donordonationhistory',
+Userprofile: '/api/userprofile',
 }
