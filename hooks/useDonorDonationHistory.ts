@@ -9,9 +9,7 @@ const usedonordonationhistory = async () => {
     const email = (await AsyncStorage.getItem("email")) || " ";
     const encodedEmail = base64.encode(email);
     const response = await axiosInstance.get(`${Donorhistory}/${encodedEmail}`);
-    console.log("This is response", response.data);
-
-    return response.data;
+    return response.data.data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
