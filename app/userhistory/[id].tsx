@@ -58,7 +58,7 @@ const UserHistory: React.FC = () => {
               data={[item.fullName, item.email, item.status, item.bloodGroup]}
               widthArr={widthArr}
               style={styles.row}
-              textStyle={styles.text}
+           
             />
           ))
         ) : (

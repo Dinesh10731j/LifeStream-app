@@ -12,11 +12,11 @@ const DonationOverView = () => {
         name: item._id,
         population: item.total,
         color: [
-          'rgba(255, 99, 132, 0.8)',
-          'rgba(54, 162, 235, 0.8)',
-          'rgba(255, 206, 86, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
-          'rgba(153, 102, 255, 0.8)',
+          'rgba(255, 99, 132, 0.4)',
+          'rgba(54, 162, 235, 0.4)',
+          'rgba(255, 206, 86, 0.4)',
+          'rgba(75, 192, 192, 0.4)',
+          'rgba(153, 102, 255, 0.4)',
         ][index % 5],
         legendFontColor: '#7F7F7F',
         legendFontSize: 15,
@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
   adminContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems:'center',
+    justifyContent:'center'
   },
   center: {
     flex: 1,
@@ -80,10 +82,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 24,
+    overflow: "hidden",
+    textOverflow:'ellipsis'
   },
   chartContainer: {
     width: '100%',

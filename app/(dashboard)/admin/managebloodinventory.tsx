@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
     marginBottom: 24,
+    overflow: "hidden",
+    textOverflow:'ellipsis'
   },
   card: {
     width: "90%",
