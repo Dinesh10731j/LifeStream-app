@@ -3,7 +3,7 @@ import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LucideView, CalendarRange, User, LayoutDashboardIcon, LogOut } from "lucide-react-native";
 import { UseUserProfile } from '@/hooks/useUserProfile';
-import { TouchableOpacity, View, Text, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const DonorLayout = () => {

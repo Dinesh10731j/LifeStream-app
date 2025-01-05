@@ -68,7 +68,7 @@ export const UserUserLogin = () => {
       }
 
       // Handle receiptant login
-      if (data.data?.role === "receiptant") {
+      if (data.data?.role === "recipient") {
         Toast.show({
           type: "success",
           text1: "Login Success",
@@ -78,7 +78,7 @@ export const UserUserLogin = () => {
         });
 
         setTimeout(() => {
-          router.push("/(dashboard)/receiptant/receiptant");
+          router.push("/(dashboard)/receiptant/receiptantoverview");
         }, 1000);
       }
     },
