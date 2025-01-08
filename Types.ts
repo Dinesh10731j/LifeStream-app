@@ -90,3 +90,13 @@ export interface ViewHistoryProps {
   email: string;
 }
 
+
+export interface requestBloodType {
+  bloodGroup:string,
+  email:string
+  fullName:string
+  message:string
+  quantity:string,
+  urgency:string
+
+}
