@@ -15,4 +15,5 @@ Scheduledonation: "/api/schedulenewdonations",
 UpdateInfo: "/api/updatepersonalinformation",
 Donorhistory:'/api/donordonationhistory',
 Userprofile: '/api/userprofile',
+Requestblood: "/api/bloodrequest",
 }
