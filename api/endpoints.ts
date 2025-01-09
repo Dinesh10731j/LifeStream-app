@@ -17,4 +17,6 @@ Donorhistory:'/api/donordonationhistory',
 Userprofile: '/api/userprofile',
 Requestblood: "/api/bloodrequest",
 Totaldonordonation: "/api/totaldonationinfo",
+Bloodrequesthistory:"/api/getbloodrequesthistory",
+DeleteRequest: "/api/delete-request",
 }
