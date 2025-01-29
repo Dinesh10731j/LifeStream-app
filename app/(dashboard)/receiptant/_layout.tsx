@@ -48,7 +48,7 @@ export default function AdminLayout() {
         <Drawer.Screen
           name="receiptantoverview"
           options={{
-            drawerLabel: 'Receiptant Overview',
+            drawerLabel: "Receiptant Overview",
             title: 'Receiptant Overview',
             drawerIcon: ({ color, size }) => (
               <LayoutDashboardIcon color={color} size={size} />
@@ -80,7 +80,7 @@ export default function AdminLayout() {
 <Drawer.Screen
           name="viewrequesthistory"
           options={{
-            drawerLabel: 'View Request History',
+            drawerLabel: "View Request History",
             title: 'View Request History',
             drawerIcon: ({ color, size }) => (
               <HistoryIcon color={color} size={size} />
