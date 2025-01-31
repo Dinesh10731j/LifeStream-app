@@ -9,7 +9,7 @@ export const ourTeam = [
       name: "Sara Smith",
       team: "Development",
       role: "Front-End Developer",
-      image: "../src/assets/user.avif"
+      image: "@/assets/images/user.avif"
     },
     {
       name: "John Doe",
