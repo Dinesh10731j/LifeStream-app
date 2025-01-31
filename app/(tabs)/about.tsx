@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { ourTeam } from "@/utils/teamData";
 import Animated, { FadeInUp } from "react-native-reanimated";
-
+const dummyImage = require("@/assets/images/dummyteam.png")
 const AboutUs = () => {
   return (
     <ScrollView style={styles.container}>
@@ -37,7 +37,7 @@ const AboutUs = () => {
             entering={FadeInUp.delay(400).duration(500)}
             style={styles.teamCard}
           >
-            <Image source={{ uri: team.image }} style={styles.teamImage} />
+            <Image source={dummyImage} style={styles.teamImage} />
             <Text style={styles.teamName}>{team.name}</Text>
             <Text>{team.team}</Text>
             <Text>{team.role}</Text>
@@ -55,10 +55,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
-    marginBottom:12
   },
   section: {
-    marginBottom: 20,
+    marginBottom:40,
   },
   heading: {
     fontSize: 30,
@@ -88,8 +87,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   teamImage: {
-    width: 150,
-    height: 150,
+    width:300,
+    height:200,
     borderRadius: 10,
   },
   teamName: {

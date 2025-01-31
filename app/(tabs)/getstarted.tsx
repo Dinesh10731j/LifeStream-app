@@ -3,7 +3,7 @@ import React from 'react'
 const Getstarted = () => {
   return (
     <View>
-    Get started
+   <Text>Get started</Text>
     </View>
   )
 }
