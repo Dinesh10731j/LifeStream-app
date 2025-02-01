@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import Login from '../(auth)/login';
 const Getstarted = () => {
   return (
-    <View>
-   <Text>Get started</Text>
-    </View>
+ <>
+ <Login/>
+ </>
   )
 }
 
