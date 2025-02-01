@@ -6,6 +6,7 @@ import { UseUserProfile } from '@/hooks/useUserProfile';
 import { TouchableOpacity, View, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactQueryProvider from '@/app/react-query-provider';
 const DonorLayout = () => {
   const router = useRouter();
   const { data } = UseUserProfile();
@@ -17,6 +18,7 @@ const DonorLayout = () => {
   };
 
   return (
+    <ReactQueryProvider>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
         screenOptions={{
@@ -90,6 +92,7 @@ const DonorLayout = () => {
         />
       </Drawer>
     </GestureHandlerRootView>
+    </ReactQueryProvider>
   );
 };
 

@@ -11,6 +11,7 @@ const { userLogin } = Endpoints;
 const userlogin = async (data: LoginType) => {
   try {
     const response = await axiosInstance.post(userLogin, data);
+    console.log("This is the response",response.data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof Error) {

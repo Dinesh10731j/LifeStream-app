@@ -1,11 +1,18 @@
 import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet,StatusBar } from "react-native";
 import { ourTeam } from "@/utils/teamData";
 import Animated, { FadeInUp } from "react-native-reanimated";
 const dummyImage = require("@/assets/images/dummyteam.png")
 const AboutUs = () => {
   return (
     <ScrollView style={styles.container}>
+      <StatusBar barStyle={'light-content'}
+        animated={true}
+        backgroundColor="white"
+        hidden={false}
+        translucent={false}
+        networkActivityIndicatorVisible={false} // iOS only
+        showHideTransition="fade" />
       <Animated.View entering={FadeInUp.duration(500)} style={styles.section}>
         <Text style={styles.heading}>Who We Are</Text>
         <Animated.Text entering={FadeInUp.delay(400).duration(500)} style={styles.paragraph}>

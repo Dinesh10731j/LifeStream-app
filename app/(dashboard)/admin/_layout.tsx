@@ -6,9 +6,11 @@ import { LayoutDashboardIcon, Package, Users, ClipboardList,LogOut} from 'lucide
 import { useRouter } from 'expo-router';
 import { UseUserProfile } from '@/hooks/useUserProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactQueryProvider from '@/app/react-query-provider';
 export default function AdminLayout() {
   const router = useRouter();
   const {data} =UseUserProfile();
+
 
   const handleLogout = () => {
     router.replace('/');
@@ -17,6 +19,7 @@ export default function AdminLayout() {
   };
 
   return (
+    <ReactQueryProvider>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
         screenOptions={{
@@ -87,6 +90,7 @@ export default function AdminLayout() {
         />
       </Drawer>
     </GestureHandlerRootView>
+    </ReactQueryProvider>
   );
 }
 

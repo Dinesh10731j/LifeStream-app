@@ -2,21 +2,22 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
+import ReactQueryProvider from '../react-query-provider';
 export default function TabLayout() {
   return (
     <>
+    <ReactQueryProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#D32F2F',
           tabBarInactiveTintColor: 'white',
         tabBarStyle: {
-          backgroundColor: '#f8c8d8', // Soft pink color
-          borderTopLeftRadius: 20,    // Rounded top-left corner (screen's bottom-left)
-          borderTopRightRadius: 20,   // Rounded top-right corner (screen's bottom-right)
-          height: 60,                 // Optional: Adjust tab bar height
-          paddingBottom: 5,           // Optional: Adjust content positioning
+          backgroundColor: '#f8c8d8',
+          borderTopLeftRadius: 20,   
+          borderTopRightRadius: 20,   
+          height: 60,                 
+          paddingBottom: 5,          
         },
       }}
     >
@@ -49,6 +50,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </ReactQueryProvider>
 
     </>
 
